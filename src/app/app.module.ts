@@ -14,6 +14,7 @@ import { Error404Component } from './error404/error404.component';
 import { AppareilService } from './services/appareil.service';
 import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
+import { EditAppareilComponent } from './edit-appareil/edit-appareil.component';
 
 
 const appRoutes: Routes = [
@@ -33,7 +34,8 @@ const appRoutes: Routes = [
     AuthComponent,
     AppareilViewComponent,
     SingleAppareilComponent,
-    Error404Component
+    Error404Component,
+    EditAppareilComponent
   ],
   imports: [
     BrowserModule,
