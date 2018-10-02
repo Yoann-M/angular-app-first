@@ -1,0 +1,14 @@
+.pastille {
+    float: right;
+    height: 20px;
+    width: 20px;
+    background: transparent;
+    border-radius: 100%;
+    transition: all 0.5s;
+    &--off {
+        background: red;
+    }
+    &--on {
+        background: green;
+    }
+}

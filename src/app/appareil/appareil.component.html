@@ -3,11 +3,16 @@
   'list-group-item-success': appareilStatus === 'allumé',
   'list-group-item-danger': appareilStatus === 'éteint'
 }">
-  <div *ngIf="appareilStatus === 'éteint';else allumeBlock"
-      style="height: 20px;width: 20px;background: red; border-radius: 100%"></div>
-  <ng-template #allumeBlock>
-      <div style="height: 20px;width: 20px;background: green; border-radius: 100%"></div>
-  </ng-template>
+  <div [ngClass]="'pastille ' + getClassPastille()"></div>
   <h4 [ngStyle]="{color: getColor()}">Appareil: {{ appareilName }} -- Statut: {{ getStatus() }}</h4>
-  <input type="text" class="form-control" [(ngModel)]="appareilName">
+  <input type="text" class="form-control" [(ngModel)]="appareilName"><br>
+  <div class="btn-group">
+    <button class="btn btn-success"
+    (click)="onSwitchOn()"
+    [disabled]= "appareilStatus === 'allumé'">Allumer</button>
+    <button class="btn btn-danger"
+    (click)="onSwitchOff()"
+    [disabled]= "appareilStatus === 'éteint'">Eteindre</button>
+  </div>
+  <a class="btn btn-default" [routerLink]="[id]">Voir le détail</a>
 </li>
