@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { User } from '../models/User.model';
@@ -11,10 +11,10 @@ import { User } from '../models/User.model';
 })
 export class NewUserComponent implements OnInit {
 
-  userform: FormGroup;
+  userForm: FormGroup;
 
   constructor(
-    private formbuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private userService: UserService,
     private router: Router) { }
 
@@ -23,25 +23,36 @@ export class NewUserComponent implements OnInit {
   }
 
   initForm() {
-    this.userform = this.formbuilder.group({
-      firstname: '',
-      lastname: '',
-      email: '',
-      drinkPreferences: '',
-      hobbies: []
+    this.userForm = this.formBuilder.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      drinkPreferences: ['', Validators.required],
+      hobbies: this.formBuilder.array([])
     })
   }
 
   onSubmitForm() {
-    const formValue = this.userform.value;
+    const formValue = this.userForm.value;
     const newUser = new User(
       formValue['firstname'],
-      formValue['lasttname'],
+      formValue['lastname'],
       formValue['email'],
-      formValue['drinkPreference']
+      formValue['drinkPreferences'],
+      formValue['hobbies'] ? formValue['hobbies'] : [] // Hobbies facultatif donc si vide : retourne un array vide
     );
     this.userService.addUser(newUser);
-    this.router.navigate(['user-list'])
+    this.router.navigate(['users']);
   }
 
+  getHobbies() {
+    return this.userForm.get('hobbies') as FormArray;
+  }
+
+  onAddHobbie(){
+    const newHobbieControl = this.formBuilder.control('', Validators.required);
+    this.getHobbies().push(newHobbieControl);
+  }
+
+  
 }

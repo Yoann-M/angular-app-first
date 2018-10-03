@@ -31,6 +31,7 @@ export class AppareilViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.onFetch();
     this.appareilSubscription = this.appareilService.appareilSubject.subscribe(
       (appareils: any[]) => {
         this.appareils = appareils
@@ -48,6 +49,14 @@ export class AppareilViewComponent implements OnInit {
     } else {
       return null;
     }
+  }
+
+  onSave(){
+    this.appareilService.saveAppareilToServer();
+  }
+  
+  onFetch() {
+    this.appareilService.getAppareilFromServer();
   }
 
 }

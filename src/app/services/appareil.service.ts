@@ -1,32 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppareilService {
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   appareilSubject = new Subject<any[]>();
 
-  private appareils = [
-    {
-      id: 1,
-      name: 'Machine à laver',
-      status: 'allumé'
-    },
-    {
-      id: 2,
-      name: 'Frigo',
-      status: 'allumé'
-    },
-    {
-      id: 3,
-      name: 'Ordinateur',
-      status: 'éteint'
-    },
-  ];
+  private appareils = [];
 
   emitAppareilSubject() {
     // on transmet une copie du tableau appareil avec slice
@@ -78,6 +64,33 @@ export class AppareilService {
     this.appareils.push(appareilObject);
     this.emitAppareilSubject();
   }
+  
+  private urlFirebase: string = ''
 
+  saveAppareilToServer() {
+    this.httpClient
+      .put(this.urlFirebase, this.appareils)
+      .subscribe(
+        () => {
+          console.log('Enregistré avec success')
+        },
+        (error) => {
+          console.log('Erreur de sauvegarde ' + error)
+        }
+      )
+  }
 
+  getAppareilFromServer() {
+    this.httpClient
+      .get<any[]>(this.urlFirebase)
+      .subscribe(
+        (response) => {
+          this.appareils = response;
+          this.emitAppareilSubject();
+        },
+        (error) => {
+          console.log('Erreur de récupération ' + error)
+        }
+      )
+  }
 }
